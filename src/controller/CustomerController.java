@@ -38,7 +38,7 @@ public class CustomerController implements ActionListener  {
         
     }
 //metodo para iniciar la vista y la conexión 
-    public void iniciarGUI() throws RemoteException {
+    public void iniciarGUI() {
         this.view.setTitle("Gestor de Tareas - Cliente");
         this.view.setVisible(true);
         this.empleadoListModel = new DefaultListModel<>();

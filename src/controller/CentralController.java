@@ -1,33 +1,36 @@
-
 package controller;
 
+import interfaces.ConnectionListener;
 import model.RemoteServices;
 import view.*;
 
+public class CentralController implements ConnectionListener {
 
-public class CentralController {
-    
-    private RemoteServices remoteServices; 
+    private RemoteServices remoteServices;
     private AdminController adminController;
     private CustomerController customerController;
     private ServerConfigController serverConfigController;
 
     public CentralController() {
         this.remoteServices = new RemoteServices();
-        //this.adminController = (new AdminGUI(), remoteServices);
-        
-        this.serverConfigController = new ServerConfigController( remoteServices , new ServerConfigGUI());
+        this.serverConfigController = new ServerConfigController(remoteServices, new ServerConfigGUI());
     }
-    
-    public void start(){
+
+    public void start() {
         this.serverConfigController.iniciar();
-        if(this.remoteServices.getIp() != null){
-            this.customerController = new CustomerController (this.serverConfigController.getConfigServer(), new CustomerGUI());
-            
-        }else{
-            System.out.println("Esta vacio");
+       }
+
+    @Override
+    public void onConnectionEstablished(RemoteServices remoteServices, String rol) {
+        this.remoteServices = remoteServices;
+        switch (rol) {
+            case "customer" -> {
+                this.customerController = new CustomerController(remoteServices, new CustomerGUI());
+                this.customerController.iniciarGUI();
+            }
+            default -> throw new AssertionError();
         }
+
     }
-    
-    
+
 }
